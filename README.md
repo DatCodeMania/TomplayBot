@@ -2,6 +2,9 @@
 
 This is a WIP project that automates the creation of accounts with a free trial on https://tomplay.com
 
+## Currently functioning
+- Dynamic input system for credit card credentials
+
 ## Usage
 
 ```sh

@@ -1,14 +1,13 @@
 import re
 import threading
 import time
-
 import pyperclip
 from colorama import Fore
 
 
 class InputHandler:
-    def __init__(self, monitor_clipboard):
-        self.monitor_clipboard = monitor_clipboard
+    def __init__(self, should_monitor_clipboard):
+        self.should_monitor_clipboard = should_monitor_clipboard
         self.clipboard_content = None
         self.event = threading.Event()
 
@@ -27,7 +26,7 @@ class InputHandler:
         clipboard_content = None
         thread = threading.Thread(target=self.monitor_clipboard, args=(pattern,), daemon=True)
         thread.start()
-        print(prompt)
+        print(prompt, end='', flush=True)
 
         while not self.event.is_set():
             current_clipboard = pyperclip.paste()
@@ -43,10 +42,10 @@ class InputHandler:
 
     def get_card_number(self):
         pattern = r'^\d{4} ?\d{4} ?\d{4} ?\d{4}$'  # regex for 16 digit credit card number, optional spaces
-        if self.monitor_clipboard:
+        if self.should_monitor_clipboard:
             prompt = f"{Fore.BLUE}[💳] Please copy the credit card number to the clipboard:"
             card_number = self.get_input(prompt, pattern)
-            print(f"{Fore.GREEN}Detected card number: {card_number}")
+            print(f"\n{Fore.GREEN}Detected card number: {card_number}")
             return card_number
         else:
             card_number = ""
@@ -59,10 +58,10 @@ class InputHandler:
 
     def get_expiration_date(self):
         pattern = r'^\d{2}/\d{2}$'  # regex for MM/YY
-        if self.monitor_clipboard:
+        if self.should_monitor_clipboard:
             prompt = f"{Fore.BLUE}[📅] Please copy the credit card expiration date (MM/YY) to the clipboard:"
             expiration_date = self.get_input(prompt, pattern)
-            print(f"{Fore.GREEN}Detected expiration date: {expiration_date}")
+            print(f"\n{Fore.GREEN}Detected expiration date: {expiration_date}")
             return expiration_date
         else:
             expiration_date = ""
@@ -75,10 +74,10 @@ class InputHandler:
 
     def get_cvc(self):
         pattern = r'^\d{3}$'  # regex for 3 digit verification code
-        if self.monitor_clipboard:
+        if self.should_monitor_clipboard:
             prompt = f"{Fore.BLUE}[🔒] Please copy the credit card CVC/CVV to the clipboard:"
             cvc = self.get_input(prompt, pattern)
-            print(f"{Fore.GREEN}Detected CVC/CVV: {cvc}")
+            print(f"\n{Fore.GREEN}Detected CVC/CVV: {cvc}")
             return cvc
         else:
             cvc = ""
