@@ -70,6 +70,7 @@ class TomplayBot:
         self.wait_for_clickability((By.XPATH, "//li[text()='Saxophone']")).click()
         self.wait_for_clickability((By.CSS_SELECTOR, "#select2-level-container")).click()
         self.wait_for_clickability((By.XPATH, "//li[text()='Intermediate']")).click()
+        # TODO: Fix below two statements, currently not functional.
         self.wait_for_clickability((By.XPATH, "//div[@class='custom-checkbox brand-checkbox terms-and-privacy']/input[@name='terms_and_conditions']")).click()
         self.wait_for_clickability((By.ID, "register-submit-btn")).click()
 
