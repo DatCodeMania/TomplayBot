@@ -70,8 +70,11 @@ def get_driver():
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option('useAutomationExtension', False)
     chrome_options.add_extension("./uBlock0.chromium.crx")
-    prefs = {
-            "profile.managed_default_content_settings.images": 2,
-            "profile.managed_default_content_settings.video": 2
-        }
-    chrome_options.add_experimental_option("prefs", prefs)
+    #prefs = {
+            #"profile.managed_default_content_settings.images": 2,
+            #"profile.managed_default_content_settings.video": 2
+        #}
+    #chrome_options.add_experimental_option("prefs", prefs)
+
+    driver = webdriver.Chrome(options=chrome_options)
+    return driver

@@ -2,3 +2,5 @@ uBlock0.chromium.crx
 venv
 sandbox.py
 __pycache__
+.env
+chrome_sessions

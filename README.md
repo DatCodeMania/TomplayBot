@@ -4,6 +4,14 @@ This is a WIP project that automates the creation of accounts with a free trial 
 
 ## Currently functioning
 - Dynamic input system for credit card credentials
+- Color-coded logger
+- Account creation, no claiming of trial yet though.
+
+## TODO
+- Add payment method
+- Claim trial
+- Cancel trial(so no billing)
+- Remove payment method
 
 ## Usage
 
@@ -13,5 +21,6 @@ cd TomplayBot
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+mv .env.example .env
 python3 main.py
 ```
