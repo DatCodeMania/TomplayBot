@@ -4,6 +4,7 @@ import uuid
 from selenium import webdriver
 
 
+# It would've probably been a good idea to make this more robust, however, for this project it should do
 def get_random_user_agent():
     user_agents_pool = [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
@@ -26,6 +27,7 @@ def get_random_user_agent():
 
 
 def get_driver():
+    # Research these comments if you feel like it, they are mainly performance optimizations and also evasion methods.
     arguments = [
             "--window-size=1920,1080",
             f"user-agent={get_random_user_agent()}",

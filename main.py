@@ -7,7 +7,7 @@ import time
 import uuid
 
 import dotenv
-from colorama import init
+from colorama import Fore, init
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -23,12 +23,14 @@ dotenv.load_dotenv()
 
 class TomplayBot:
     MONITOR_CLIPBOARD = True
-    DEFAULT_WAIT_TIME = 30  # in seconds
+    DEFAULT_WAIT_TIME = 60  # in seconds
     DEFAULT_RETRY_ATTEMPTS = 3
 
+    # You can alter this if you do not plan to make changes to the script, at the time of writing there is no need to debug. The script is stable.
     LOGGING_LEVEL = logging.DEBUG
 
     # Read OPTIONS.md
+    # The below are examples, customize these values to your own needs,
     INSTRUMENT = "Saxophone"
     LEVEL = "Intermediate"
 
@@ -67,10 +69,12 @@ class TomplayBot:
                 continue
         raise RuntimeError("Attempts exhausted to find clickability")
 
+    # Using the in-config defined email domain to generate a random email using the uuid lib
     def generate_random_email(self):
         unique_id = uuid.uuid4().hex[:8]
         return f"tomplay_{unique_id}@{self.email_domain}"
 
+    # Generating a random, 12 digit password using the secrets lib.
     def generate_password(self):
         return ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
 
@@ -78,11 +82,13 @@ class TomplayBot:
         frame = self.wait_for_visibility((By.CSS_SELECTOR, f"iframe[title='{title}']"))
         self.driver.switch_to.frame(frame)
 
+    # Evasion technique, waits a random amount of time between actions to appear more human
     def random_delay(self, min_delay=1, max_delay=3):
         wait_time = random.uniform(min_delay, max_delay)
         self.logger.debug(f"Waiting for {wait_time} seconds to appear human.")
         time.sleep(wait_time)
 
+    # Types characters one-by-one with a random wait to appear more human
     def humanized_type(self, element, text):
         self.logger.debug(f"Typing '{text}' in a human fashion...")
         for char in text:
@@ -99,12 +105,14 @@ class TomplayBot:
 
         self.random_delay()
 
+        # Enter email
         self.logger.debug("Locating email entry element...")
         email_element = self.wait_for_clickability((By.ID, "register_email"))
         self.humanized_type(email_element, email)
 
         self.random_delay()
 
+        # Enter randomly generated password
         self.logger.debug("Locating password entry element...")
         password_element = self.wait_for_clickability((By.ID, "register_password"))
         self.humanized_type(password_element, password)
@@ -167,12 +175,21 @@ class TomplayBot:
         self.humanized_type(cvc_element, self.cvc)
         self.driver.switch_to.default_content()
 
-        self.random_delay()
+        input(f"{Fore.BLUE}[🕛] Press enter when all captchas have been completed so trial can be claimed...")
 
-        # Click start trial button
-        self.logger.debug("Locating 'start trial' button...")
-        start_trial_button = self.wait_for_clickability((By.CSS_SELECTOR, "a.btn.btn--brand.cartMakePayment"))
-        ActionChains(self.driver).move_to_element(start_trial_button).click().perform()
+        # Click one of the two 'start trial' buttons
+        self.logger.debug("Locating 'start trial' buttons...")
+        self.wait.until(
+            EC.presence_of_all_elements_located((By.XPATH, "//a[contains(text(), 'Start FREE TRIAL')]"))
+        )
+        start_trial_buttons = self.driver.find_elements(By.XPATH, "//a[contains(text(), 'Start FREE TRIAL')]")
+        button_to_click = random.choice(start_trial_buttons)
+        self.logger.debug("Randomly clicking one of the two 'start trial' buttons...")
+        self.driver.execute_script("arguments[0].click();", button_to_click)
+
+        self.input(f"{Fore.BLUE}[🕛] Press enter when the payment has been authorized...")
+
+        # TODO: Implement cancelling of trial and removal of credentials.
 
     def run(self):
         self.logger.debug("Starting TomplayBot")
