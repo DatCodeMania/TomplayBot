@@ -21,6 +21,7 @@ I can currently not implement these as I have no credit cards available to me fo
 ```sh
 git clone https://github.com/DatCodeMania/TomplayBot.git
 cd TomplayBot
+# I would suggest reading OPTIONS.md and altering the constants INSTRUMENT and LEVEL at the start of main.py to match your purposes
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
